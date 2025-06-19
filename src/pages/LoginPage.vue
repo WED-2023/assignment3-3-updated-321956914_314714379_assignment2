@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { reactive } from 'vue';
+import { reactive, getCurrentInstance  } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 
@@ -72,17 +72,22 @@ export default {
       return field.$dirty ? !field.$invalid : null;
     };
 
+    const internalInstance = getCurrentInstance();
+    const { axios, store, $router } = internalInstance.appContext.config.globalProperties;
+    const toast = internalInstance.appContext.config.globalProperties.toast;
+
     const login = async () => {
       const valid = await v$.value.$validate();
       if (!valid) return;
 
       try {
-        await window.axios.post('/login', {
+        await axios.post(store.server_domain + "/api/login", {
           username: state.username,
           password: state.password,
-        });
-        window.store.login(state.username);
-        window.router.push('/main');
+        }, { withCredentials: true });
+        store.login(state.username);
+        toast("Login", "User logged in successfully", "success");
+        $router.push('/');
       } catch (err) {
         state.submitError = err.response?.data?.message || 'Unexpected error.';
       }

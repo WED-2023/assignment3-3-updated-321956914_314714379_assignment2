@@ -14,6 +14,7 @@
       </span>
     </div>
     <router-view />
+    <b-toast-container />
   </div>
 </template>
 
@@ -27,11 +28,17 @@ export default {
     const store = internalInstance.appContext.config.globalProperties.store;
     const toast = internalInstance.appContext.config.globalProperties.toast;
     const router = internalInstance.appContext.config.globalProperties.$router;
+    const axios = internalInstance.appContext.config.globalProperties.axios;
 
-    const logout = () => {
-      store.logout();
-      toast("Logout", "User logged out successfully", "success");
-      router.push("/").catch(() => {});
+    const logout = async () => {
+      try {
+        await axios.post(store.server_domain + "/api/logout", {}, { withCredentials: true}); //
+        store.logout();
+        toast("Logout", "User logged out successfully", "success");
+        router.push("/").catch(() => {});
+      } catch (error) {
+          toast("Logout Error", "Failed to contact logout endpoint", "danger");
+      }
     };
 
     return { store, logout };
