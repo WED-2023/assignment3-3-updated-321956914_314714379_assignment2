@@ -1,11 +1,17 @@
 <template>
   <div class="container">
     <h3>{{ title }}</h3>
-    
-    <div class="row">
-      <div class="col" v-for="r in recipes" :key="r.id">
+
+    <div class="d-flex flex-column gap-3">
+      <div v-for="r in recipes" :key="r.id">
         <RecipePreview class="recipePreview" :recipe="r" />
       </div>
+    </div>
+
+    <div class="mt-4 text-center">
+      <button class="btn btn-primary" @click="updateRecipes">
+        Refresh Recipes
+      </button>
     </div>
   </div>
 </template>

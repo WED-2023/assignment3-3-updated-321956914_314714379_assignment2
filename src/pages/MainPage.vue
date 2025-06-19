@@ -2,53 +2,53 @@
   <div class="container">
     <h1 class="title">Main Page</h1>
 
-    <RecipePreviewList title="Random Recipes" class="RandomRecipes center" />
+    <b-row>
+      <b-col cols="6">
+        <RecipeRandomPreviewList title="Random Recipes" class="RandomRecipes center" />
+      </b-col>
 
-    <div v-if="!store.username" class="text-center mt-4">
-      <router-link :to="{ name: 'login' }">
-        <button class="btn btn-primary">You need to Login to view this</button>
-      </router-link>
-    </div>
-
-    <RecipePreviewList
-      title="Last Viewed Recipes"
-      :class="{
-        RandomRecipes: true,
-        blur: !store.username,
-        center: true
-      }"
-      disabled
-    />
+      <b-col cols="6">
+        <MiniLogin v-if="!store.username" />
+        <LastViewedRecipesList
+          v-else
+          title="Last Viewed Recipes"
+        />
+      </b-col>
+    </b-row>
   </div>
 </template>
 
 <script>
-import { getCurrentInstance } from 'vue';
-import RecipePreviewList from "../components/RecipePreviewList.vue";
+import { getCurrentInstance, ref, onMounted } from 'vue';
+import axios from 'axios';
+import MiniLogin from "../components/MiniLogin.vue";
+import RecipeRandomPreviewList from '../components/RecipeRandomPreviewList.vue';
+import LastViewedRecipesList from '../components/LastViewedRecipesList.vue';
 
 export default {
   components: {
-    RecipePreviewList
+    RecipeRandomPreviewList,
+    MiniLogin,
+    LastViewedRecipesList,
   },
   setup() {
     const internalInstance = getCurrentInstance();
     const store = internalInstance.appContext.config.globalProperties.store;
 
-    return { store };
+    const lastViewedRecipes = ref([]);
+
+    onMounted(async () => {
+      if (store.username) {
+        try {
+          const { data } = await axios.get('/api/users/lastviewed');
+          lastViewedRecipes.value = data.slice(0, 3);
+        } catch (error) {
+          console.error('Failed to fetch last viewed recipes:', error);
+        }
+      }
+    });
+
+    return { store, lastViewedRecipes };
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.RandomRecipes {
-  margin: 10px 0 10px;
-}
-.blur {
-  -webkit-filter: blur(5px); /* Safari 6.0 - 9.0 */
-  filter: blur(2px);
-}
-::v-deep .blur .recipe-preview {
-  pointer-events: none;
-  cursor: default;
-}
-</style>
