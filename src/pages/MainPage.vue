@@ -19,8 +19,7 @@
 </template>
 
 <script>
-import { getCurrentInstance, ref, onMounted } from 'vue';
-import axios from 'axios';
+import { getCurrentInstance } from 'vue';
 import MiniLogin from "../components/MiniLogin.vue";
 import RecipeRandomPreviewList from '../components/RecipeRandomPreviewList.vue';
 import LastViewedRecipesList from '../components/LastViewedRecipesList.vue';
@@ -35,20 +34,7 @@ export default {
     const internalInstance = getCurrentInstance();
     const store = internalInstance.appContext.config.globalProperties.store;
 
-    const lastViewedRecipes = ref([]);
-
-    onMounted(async () => {
-      if (store.username) {
-        try {
-          const { data } = await axios.get('/api/users/lastviewed');
-          lastViewedRecipes.value = data.slice(0, 3);
-        } catch (error) {
-          console.error('Failed to fetch last viewed recipes:', error);
-        }
-      }
-    });
-
-    return { store, lastViewedRecipes };
+    return { store };
   }
 };
 </script>

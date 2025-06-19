@@ -11,7 +11,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.js';
 // BootstrapVue 3
 import BootstrapVue3 from 'bootstrap-vue-3';
 import 'bootstrap-vue-3/dist/bootstrap-vue-3.css';
-import { BContainer, BRow, BCol, BCard, BCardText, BIcon, BIconHeartFill, BIconEyeFill } from 'bootstrap-vue-3';
+import { BContainer, BRow, BCol, BCard, BCardText} from 'bootstrap-vue-3';
 import Vuelidate from '@vuelidate/core';
 
 
@@ -56,9 +56,6 @@ app.component('BRow', BRow);
 app.component('BCol', BCol);
 app.component('BCard', BCard)
 app.component('BCardText', BCardText)
-app.component('BIcon', BIcon)
-app.component('BIconHeartFill', BIconHeartFill)
-app.component('BIconEyeFill', BIconEyeFill)
 
 // Global store
 app.config.globalProperties.store = store;
