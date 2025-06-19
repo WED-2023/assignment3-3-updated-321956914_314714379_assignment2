@@ -27,7 +27,7 @@
                 @click.prevent="toggleDropdown"
                 :class="{ active: isDropdownOpen }"
                 role="button"
-                aria-expanded="isDropdownOpen ? 'true' : 'false'"
+                :aria-expanded="isDropdownOpen ? 'true' : 'false'"
               >
                 Personal Space
               </a>
@@ -67,7 +67,13 @@
               </ul>
             </div>
 
-            <b-nav-item :to="{ name: 'createrecipe' }" tag="router-link" class="ms-3">
+            <!-- Create Recipe opens modal -->
+            <b-nav-item
+              class="ms-3"
+              role="button"
+              style="cursor:pointer;"
+              @click.prevent="showCreateModal = true"
+            >
               Create Recipe
             </b-nav-item>
 
@@ -90,18 +96,36 @@
           </template>
         </b-navbar-nav>
       </b-collapse>
+
+      <!-- Create Recipe Modal -->
+      <b-modal
+        id="createRecipeModal"
+        v-model="showCreateModal"
+        title="Create New Recipe"
+        hide-footer
+        size="lg"
+        @hide="onModalHide"
+      >
+        <NewRecipeForm ref="newRecipeForm" @created="handleRecipeCreated" />
+      </b-modal>
     </b-container>
   </b-navbar>
 </template>
 
 <script>
 import { ref, getCurrentInstance, onMounted, onBeforeUnmount } from "vue";
+import NewRecipeForm from "./NewRecipeForm.vue"; // adjust path if needed
 
 export default {
   name: "NavBar",
+  components: {
+    NewRecipeForm,
+  },
   setup() {
     const isDropdownOpen = ref(false);
+    const showCreateModal = ref(false);
     const dropdownRef = ref(null);
+    const newRecipeForm = ref(null);
 
     const internalInstance = getCurrentInstance();
     const store = internalInstance.appContext.config.globalProperties.store;
@@ -142,7 +166,31 @@ export default {
       document.removeEventListener("click", onClickOutside);
     });
 
-    return { store, isDropdownOpen, toggleDropdown, closeDropdown, logout, dropdownRef };
+    function onModalHide() {
+      // Reset the form inside modal on close
+      if (newRecipeForm.value && newRecipeForm.value.resetForm) {
+        newRecipeForm.value.resetForm();
+      }
+    }
+
+    function handleRecipeCreated() {
+      toast("Recipe Created", "Your new recipe was created successfully!", "success");
+      showCreateModal.value = false;
+      // Optionally refresh lists or do other actions here
+    }
+
+    return {
+      store,
+      isDropdownOpen,
+      toggleDropdown,
+      closeDropdown,
+      logout,
+      dropdownRef,
+      showCreateModal,
+      newRecipeForm,
+      onModalHide,
+      handleRecipeCreated,
+    };
   },
 };
 </script>

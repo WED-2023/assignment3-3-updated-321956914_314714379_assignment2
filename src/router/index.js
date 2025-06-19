@@ -57,11 +57,6 @@ const routes = [
   name: "familyrecipes",
   component: () => import("../pages/FamilyRecipesPage.vue"),
 },
-{
-  path: "/createrecipe",
-  name: "createrecipe",
-  component: () => import("../pages/CreateRecipePage.vue"),
-},
 ];
 
 export default routes;
