@@ -1,10 +1,82 @@
 <template>
-  <div class="container mt-5">
-    <h1>My Recipes</h1>
-    <p>This is a placeholder page for recipes you've created.</p>
+  <div class="container my-4">
+    <h2>My Recipes</h2>
+
+    <div v-if="loading" class="text-center my-5">
+      <b-spinner label="Loading..."></b-spinner>
+    </div>
+
+    <div v-else-if="error" class="alert alert-danger" role="alert">
+      {{ error }}
+    </div>
+
+    <div v-else>
+      <div v-if="recipes.length === 0" class="text-muted">
+        You have not created any recipes yet.
+      </div>
+
+      <div class="d-flex flex-wrap gap-3">
+        <RecipePreview
+          v-for="recipe in recipes"
+          :key="recipe.id"
+          :recipe="recipe"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-export default { name: "MyRecipesPage" };
+import { ref, onMounted, getCurrentInstance } from "vue";
+import RecipePreview from "../components/RecipePreview.vue";
+
+export default {
+  name: "MyRecipesPage",
+  components: { RecipePreview },
+  setup() {
+    const recipes = ref([]);
+    const loading = ref(false);
+    const error = ref(null);
+
+    const internalInstance = getCurrentInstance();
+    const { axios, store, toast } = internalInstance.appContext.config.globalProperties;
+
+    const fetchMyRecipes = async () => {
+      loading.value = true;
+      error.value = null;
+      try {
+        const res = await axios.get(store.server_domain + "/api/users/myrecipes", {
+          withCredentials: true,
+        });
+        recipes.value = res.data;
+      } catch (err) {
+        error.value = "Failed to load your recipes.";
+        console.error("Error fetching my recipes:", err);
+        toast("Error", "Could not fetch your recipes", "danger");
+      } finally {
+        loading.value = false;
+      }
+    };
+
+    onMounted(() => {
+      fetchMyRecipes();
+    });
+
+    return {
+      recipes,
+      loading,
+      error,
+    };
+  },
+};
 </script>
+
+<style scoped>
+.container {
+  min-height: 400px;
+}
+
+.d-flex.flex-wrap.gap-3 {
+  gap: 1rem;
+}
+</style>
