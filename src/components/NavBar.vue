@@ -18,9 +18,6 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <router-link class="nav-link" :to="{ name: 'main' }">Main</router-link>
-          </li>
-          <li class="nav-item">
             <router-link class="nav-link" :to="{ name: 'search' }">Search</router-link>
           </li>
           <li class="nav-item">
@@ -58,9 +55,9 @@
               </li>
             </ul>
 
-            <button class="btn btn-primary me-3" @click="navigateToCreateRecipe">
+            <router-link class="btn btn-primary me-3" :to="{ name: 'createrecipe' }">
               Create Recipe
-            </button>
+            </router-link>
 
             <button class="btn btn-outline-danger" @click="logout">Logout</button>
           </template>
@@ -75,6 +72,7 @@
     </div>
   </nav>
 </template>
+
 
 <script>
 import { getCurrentInstance } from 'vue';
