@@ -23,7 +23,12 @@ const routes = [
     component: () => import("../pages/SearchPage.vue"),
   },
   {
-    path: "/recipe/:recipeId",
+    path: "/recipe/me/:recipeid",
+    name: "merecipe",
+    component: () => import("../pages/RecipeViewPage.vue"),
+  },
+  {
+    path: "/recipe/:recipeid",
     name: "recipe",
     component: () => import("../pages/RecipeViewPage.vue"),
   },

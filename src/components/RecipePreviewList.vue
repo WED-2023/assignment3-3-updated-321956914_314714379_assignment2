@@ -12,7 +12,6 @@
 
 <script>
 import RecipePreview from "./RecipePreview.vue";
-
 export default {
   name: "RecipePreviewList",
   components: {
@@ -34,13 +33,24 @@ export default {
   },
   methods: {
     async updateRecipes() {
+      const cacheKey = "cachedRandomRecipes";
+      // Try to load from localStorage
+      const cached = localStorage.getItem(cacheKey);
+      if (cached) {
+        this.recipes = JSON.parse(cached);
+        return;
+    }
+      // If no cache, fetch from API
       try {
         const response = await this.axios.get(
-          // this.$root.store.server_domain + "/api/recipes/random"
+           this.$root.store.server_domain + "/api/recipes/random"
         );
-        const recipes = response.data;
-        this.recipes = [];
-        this.recipes.push(...recipes);
+        const recipes =  response.data
+        
+        // save to localStorage
+        localStorage.setItem(cacheKey, JSON.stringify(recipes));
+        this.recipes = recipes;
+        
       } catch (error) {
         console.log(error);
       }
