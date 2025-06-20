@@ -1,7 +1,7 @@
 <template>
   <div class="container my-4" v-if="recipe">
-    <h2>{{ recipe.title }}</h2>
-    <img :src="recipe.image" :alt="recipe.title" class="img-fluid mb-3" />
+    <h2>{{ recipe.name }}</h2>
+    <img :src="recipe.image" :alt="recipe.name" class="img-fluid mb-3" />
 
     <div class="mb-2">
       <b-badge :variant="isViewed ? 'primary' : 'secondary'">
@@ -12,30 +12,31 @@
       </b-badge>
     </div>
 
-    <p><strong>Preparation Time:</strong> {{ recipe.readyInMinutes }} minutes</p>
-    <p><strong>Popularity:</strong> 👍 {{ recipe.aggregateLikes }}</p>
-    <p><strong>Servings:</strong> {{ recipe.servings }}</p>
+    <p><strong>Preparation Time:</strong> {{ recipe.preparationTime }} minutes</p>
+    <p><strong>Popularity:</strong> 👍 {{ recipe.likes }}</p>
+    <p><strong>Servings:</strong> {{ recipe.servingsAmount }}</p>
 
     <div class="mb-3">
-      <b-badge :variant="recipe.vegan ? 'success' : 'secondary'">
-        {{ recipe.vegan ? 'Vegan' : 'Not Vegan' }}
+      <b-badge :variant="recipe.isVegan ? 'success' : 'secondary'">
+        {{ recipe.isVegan ? 'Vegan' : 'Not Vegan' }}
       </b-badge>
-      <b-badge :variant="recipe.vegetarian ? 'info' : 'secondary'" class="ms-2">
-        {{ recipe.vegetarian ? 'Vegetarian' : 'Not Vegetarian' }}
+      <b-badge :variant="recipe.isVegetarian ? 'info' : 'secondary'" class="ms-2">
+        {{ recipe.isVegetarian ? 'Vegetarian' : 'Not Vegetarian' }}
       </b-badge>
-      <b-badge :variant="recipe.glutenFree ? 'warning' : 'secondary'" class="ms-2">
-        {{ recipe.glutenFree ? 'Gluten-Free' : 'Contains Gluten' }}
+      <b-badge :variant="recipe.isGlutenFree ? 'warning' : 'secondary'" class="ms-2">
+        {{ recipe.isGlutenFree ? 'Gluten-Free' : 'Contains Gluten' }}
       </b-badge>
     </div>
 
     <h5>Ingredients</h5>
     <ul>
-      <li v-for="i in recipe.extendedIngredients" :key="i.id">{{ i.original }}</li>
+      <li v-for="(ing, idx) in recipe.ingredients" :key="idx">{{ ing }}</li>
     </ul>
 
     <h5>Instructions</h5>
-    <p v-if="recipe.instructions">{{ recipe.instructions }}</p>
-    <p v-else class="text-muted">No instructions provided.</p>
+    <ol>
+      <li v-for="(step, idx) in recipe.instructions" :key="idx">{{ step }}</li>
+    </ol>
   </div>
 </template>
 
@@ -44,7 +45,7 @@ import { ref, onMounted, getCurrentInstance } from 'vue';
 import { useRoute } from 'vue-router';
 
 export default {
-  name: 'ExternalRecipePage',
+  name: 'LocalRecipePage',
   setup() {
     const recipe = ref(null);
     const route = useRoute();
@@ -57,12 +58,12 @@ export default {
     onMounted(async () => {
       try {
         const res = await axios.get(
-          `${store.server_domain}/api/recipes/${route.params.recipeid}`,
+          `${store.server_domain}/api/recipes/me/${route.params.recipeid}`,
           { withCredentials: true }
         );
         recipe.value = res.data;
       } catch (err) {
-        console.error('Failed to fetch external recipe:', err);
+        console.error('Failed to fetch local recipe:', err);
       }
     });
 

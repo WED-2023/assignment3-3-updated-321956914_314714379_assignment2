@@ -117,19 +117,14 @@ export default {
     };
 
     const handleCardClick = () => {
-      if (props.recipe.source === "local") {
-        $router.push({
-          name: "merecipe",
-          params: { recipeid: props.recipe.id },
-          path: `/recipe/me/${props.recipe.id}`,
-        });
-      } else {
-        $router.push({
-          name: "recipe",
-          params: { recipeid: props.recipe.id },
-          path: `/recipe/${props.recipe.id}`,
-        });
+    $router.push({
+      name: props.recipe.source === 'local' ? 'merecipe' : 'recipe',
+      params: { recipeid: props.recipe.id },
+      query: {
+        isViewed: props.recipe.isViewed,
+        isFavorite: props.recipe.isFavorite
       }
+});
     };
 
     return {
