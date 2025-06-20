@@ -85,13 +85,19 @@ export default {
           username: state.username,
           password: state.password,
         }, { withCredentials: true });
+
         store.login(state.username);
         toast("Login", "User logged in successfully", "success");
         $router.push('/');
       } catch (err) {
-        state.submitError = err.response?.data?.message || 'Unexpected error.';
+        if (err.response?.status === 401) {
+          toast("Login failed", "Username or password is incorrect", "danger");
+        } else {
+          state.submitError = err.response?.data?.message || 'Unexpected error.';
+        }
       }
     };
+
 
     return { state, v$, login, getValidationState };
   },
