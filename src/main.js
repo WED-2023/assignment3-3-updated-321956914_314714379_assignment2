@@ -99,4 +99,5 @@ app.config.globalProperties.toast = function (title, content, variant = null, ap
   }, 3000);
 };
 // Mount app
+document.title = 'Or & Rudy Recipes';
 app.mount('#app');
