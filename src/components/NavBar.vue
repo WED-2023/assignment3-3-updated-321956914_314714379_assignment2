@@ -1,5 +1,5 @@
 <template>
-  <b-navbar toggleable="lg" type="light" variant="light">
+  <b-navbar toggleable="lg" type="light" variant="light" class="fixed-top">
     <b-container>
       <b-navbar-brand :to="{ name: 'main' }" tag="router-link">Vue Recipes</b-navbar-brand>
 
