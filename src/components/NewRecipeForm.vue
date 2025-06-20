@@ -126,6 +126,18 @@
         At least one instruction is required
       </b-form-invalid-feedback>
     </b-form-group>
+    <!-- Dietary information -->
+    <b-form-group label="Dietary information">
+      <b-form-checkbox v-model="form.isVegetarian">
+        Vegetarian
+      </b-form-checkbox>
+      <b-form-checkbox v-model="form.isVegan">
+        Vegan
+      </b-form-checkbox>
+      <b-form-checkbox v-model="form.isGlutenFree">
+        Gluten-Free
+      </b-form-checkbox>
+    </b-form-group>
 
     <b-form-group label="Family Recipe" label-for="familyrecipe" :state="validation.familyrecipe === null ? null : validation.familyrecipe">
       <b-form-select
