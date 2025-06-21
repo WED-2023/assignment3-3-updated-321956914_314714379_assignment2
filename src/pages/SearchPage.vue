@@ -62,7 +62,7 @@
     <div v-if="userLastSearch && !hasSearched && isLoggedIn" class="mt-5">
       <h5>Your Last Search</h5>
       <div class="d-flex flex-wrap gap-3 mt-3">
-        <RecipePreview v-for="r in userLastSearch" :key="r.id" :recipe="r" />
+        <LastSearchRecipeCard v-for="r in userLastSearch" :key="r.id" :recipe="r" />
       </div>
     </div>
   </div>
@@ -71,10 +71,11 @@
 <script>
 import { ref, getCurrentInstance, onMounted } from 'vue';
 import RecipePreview from '../components/RecipePreview.vue';
+import LastSearchRecipeCard from '../components/LastSearchRecipeCard.vue';
 
 export default {
   name: 'SearchRecipesPage',
-  components: { RecipePreview },
+  components: { RecipePreview, LastSearchRecipeCard },
   setup() {
     const query = ref('');
     const filters = ref({
