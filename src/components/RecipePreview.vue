@@ -121,7 +121,7 @@ export default {
       name: props.recipe.source === 'local' ? 'merecipe' : 'recipe',
       params: { recipeid: props.recipe.id },
       query: {
-        isViewed: props.recipe.isViewed,
+        isViewed: true,
         isFavorite: props.recipe.isFavorite
       }
 });
