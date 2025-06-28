@@ -1,7 +1,16 @@
 <template>
   <b-navbar toggleable="lg" type="light" variant="light" class="fixed-top">
     <b-container>
-      <b-navbar-brand :to="{ name: 'main' }" tag="router-link">Or & Rudy Recipes</b-navbar-brand>
+      <b-navbar-brand :to="{ name: 'main' }" tag="router-link" class="d-flex align-items-center">
+        <img
+          src="/recipeslogo.png"
+          alt="Site Logo"
+          height="30"
+          class="me-2"
+          style="object-fit: contain;"
+        />
+        Or & Rudy Recipes
+    </b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse" />
 
