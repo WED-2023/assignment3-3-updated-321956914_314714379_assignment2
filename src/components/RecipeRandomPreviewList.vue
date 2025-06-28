@@ -8,8 +8,8 @@
       </div>
     </div>
 
-    <div class="mt-4 text-center">
-      <button class="btn btn-primary" @click="updateRecipes">
+    <div class="mt-4 text-left">
+      <button class="btn btn-primary w-50" @click="updateRecipes">
         Refresh Recipes
       </button>
     </div>

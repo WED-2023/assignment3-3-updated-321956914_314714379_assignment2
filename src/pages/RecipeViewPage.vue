@@ -1,7 +1,11 @@
 <template>
   <div class="container my-4" v-if="recipe">
     <h2>{{ recipe.title }}</h2>
-    <img :src="recipe.image" :alt="recipe.title" class="img-fluid mb-3" />
+    <img
+      :src="recipe.image"
+      :alt="recipe.title"
+      class="img-fluid mb-3 recipe-image"
+    />
 
     <div class="mb-2">
       <b-badge :variant="isViewed ? 'primary' : 'secondary'">
@@ -40,16 +44,16 @@
 </template>
 
 <script>
-import { ref, onMounted, getCurrentInstance } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, onMounted, getCurrentInstance } from "vue";
+import { useRoute } from "vue-router";
 
 export default {
-  name: 'ExternalRecipePage',
+  name: "ExternalRecipePage",
   setup() {
     const recipe = ref(null);
     const route = useRoute();
-    const isViewed = ref(route.query.isViewed === 'true');
-    const isFavorite = ref(route.query.isFavorite === 'true');
+    const isViewed = ref(route.query.isViewed === "true");
+    const isFavorite = ref(route.query.isFavorite === "true");
 
     const internalInstance = getCurrentInstance();
     const { axios, store } = internalInstance.appContext.config.globalProperties;
@@ -62,7 +66,7 @@ export default {
         );
         recipe.value = res.data;
       } catch (err) {
-        console.error('Failed to fetch external recipe:', err);
+        console.error("Failed to fetch external recipe:", err);
       }
     });
 
@@ -74,3 +78,13 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.recipe-image {
+  max-width: 600px;
+  max-height: 400px;
+  object-fit: contain;
+  display: block;
+  margin-bottom: 1rem;
+}
+</style>
