@@ -83,6 +83,6 @@ export default {
   min-height: 600px;
 }
 .d-flex.flex-wrap.gap-3 {
-  gap: 1rem;
+  gap: 0;
 }
 </style>
